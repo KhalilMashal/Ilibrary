@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Category>
+
+<div class="dropdown">
+    <a class="navbar-brand dropdown-toggle" href="#" id="navbarDropdownBrand" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+         <img src="/images/ILibrary3.png" style="width:45px" />
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdownBrand">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var category in Model)
+            {
+                <li>
+                    <a class="dropdown-item" asp-area="customer" asp-controller="Home" asp-action="filter" asp-route-id="@category.Id">@category.Name</a>
+                </li>
+            }
+        }
+        else
+        {
+            <li>
+                <span class="dropdown-item-text">No categories available</span>
+            </li>
+        }
+    </ul>
+</div>  

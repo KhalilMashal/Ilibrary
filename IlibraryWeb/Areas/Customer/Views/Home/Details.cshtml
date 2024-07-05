@@ -1,0 +1,280 @@
+﻿@using Ilibrary.Utility
+@model DetailsVM
+
+<style>
+
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border-radius: 6px;
+        box-shadow: 0px 0px 5px 0px rgba(212, 182, 212, 1);
+        margin-top: 20px;
+    }
+
+    .comment-box {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 6px;
+    }
+
+    .comment-area textarea {
+        resize: none;
+        border: 1px solid #ad9f9f;
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    .rating {
+        display: flex;
+        flex-direction: row-reverse;
+        margin-left: -4px;
+    }
+
+        .rating > input {
+            display: none;
+        }
+
+        .rating > label {
+            width: 20px;
+            font-size: 25px;
+            color: #ff0000;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+            .rating > label::before {
+                content: "\2605";
+                position: absolute;
+                opacity: 0.5;
+            }
+
+        .rating > input:checked ~ label:before {
+            opacity: 1;
+        }
+
+    .comment-btns {
+        margin-top: 20px;
+    }
+
+        .comment-btns .btn {
+            width: 100%;
+        }
+
+    fa-star {
+        font-size: 1.5em;
+        color: #ddd; 
+    }
+
+    .fa-star.checked {
+        color: #f39c12; 
+    }
+</style>
+
+<form method="post">
+    <input hidden asp-for="shoppingcarts.ProductId" />
+    <div class="card shadow border-0 mt-4 mb-4">
+        <div class="card-header bg-secondary bg-gradient text-light py-4">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3 class="text-white text-uppercase">@Model.shoppingcarts.Product.Title</h3>
+                    <p class="text-white-50 fw-semibold mb-0">@Model.shoppingcarts.Product.Author</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="py-3">
+                <div class="row">
+                    <div class="col-6 col-md-2 offset-lg-1 pb-1">
+                        <a  asp-action="Index" class="btn btn-outline-primary bg-gradient mb-5 fw-semibold btn-sm text-uppercase">
+                            <small>Back to home</small>
+                           
+
+                        </a>
+                       
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-3 offset-lg-1 text-center mb-3">
+                       
+                        @if (Model.shoppingcarts.Product.BookImage != null)
+                        {
+
+
+
+                            <img class="card-img-top  fixed-size-img" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.shoppingcarts.Product.BookImage)">
+                        }
+                        
+                    </div>
+                    <div class="col-12 col-lg-6 offset-lg-1">
+
+                        <div class="col-12 col-md-6 pb-4">
+                            <span class="badge">@Model.shoppingcarts.Product.Category.Name</span>
+                        </div>
+                        <div class="row ps-2">
+                            <h6 class="text-dark text-opacity-50 ">ISBN : @Model.shoppingcarts.Product.ISBN</h6>
+                        </div>
+                        <div class="row ps-2">
+                            <h6 class="text-dark text-opacity-50  pb-2">
+                                List Price:
+                                <span class="text-decoration-line-through">
+                                    @Model.shoppingcarts.Product.ListPrice.ToString("c")
+                                </span>
+                            </h6>
+                        </div>
+                        <div class="row text-center ps-2">
+                            <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                                <div class="text-dark text-opacity-50 fw-semibold">Quantity</div>
+                            </div>
+                            <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                                <div class="text-dark text-opacity-50 fw-semibold">1-50</div>
+                            </div>
+                            <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                                <div class="text-dark text-opacity-50 fw-semibold">51-100</div>
+                            </div>
+                            <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                                <div class="text-dark text-opacity-50 fw-semibold">100+</div>
+                            </div>
+                        </div>
+                        <div class="row text-center ps-2">
+                            <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
+                                <div>Price</div>
+                            </div>
+                            <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
+                                <div>@Model.shoppingcarts.Product.Price</div>
+                            </div>
+                            <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
+                                <div>@Model.shoppingcarts.Product.Price50</div>
+                            </div>
+                            <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
+                                <div>@Model.shoppingcarts.Product.Price100</div>
+                            </div>
+                        </div>
+                        <div class="row pl-2 my-3">
+                            <p class="text-secondary lh-sm">@Html.Raw(Model.shoppingcarts.Product.Description)</p>
+                        </div>
+                        <div class="row pl-2 mb-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text bg-primary text-white border-0 fw-semibold"
+                                          id="inputGroup-sizing-default">
+                                        Count 
+                                    </span>
+                                    <input  asp-for="shoppingcarts.Count" type="number" value="1" min="1" class="form-control text-end"
+                                           aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 pb-1">
+                                <button type="submit" 
+                                        class="btn btn-primary bg-gradient  w-100 py-2 text-uppercase fw-semibold">
+                                    Add to Cart 
+                                </button>
+                                <br>
+                                <br>
+                              
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        @if ( User.IsInRole(SD.Role_Customer) || User.IsInRole(SD.Role_Company))
+        {
+            <div class="card mt-4 mb-4">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="comment-box ml-6">
+                            <input hidden asp-for="comments.Id" />
+                            <h4>Add a comment</h4>
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(model => model.shoppingcarts.ProductId)
+                                <div class="rating">
+                                    @for (int i = 5; i >= 1; i--)
+                                    {
+                                        <input type="radio" name="comments.Rating" value="@i" id="@i" />
+                                        <label for="@i">☆</label>
+                                    }
+                                </div>
+                                <div class="comment-area">
+                                    @Html.TextAreaFor(model => model.comments.Text, new { @class = "form-control", placeholder = "What's your view?", rows = 4 })
+                                    @Html.ValidationMessageFor(model => model.comments.Text, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="comment-btns mt-2">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button asp-controller="Home" type="submit" asp-action="AddComment" class="btn btn-primary bg-gradient w-100 py-2 text-uppercase fw-semibold">
+                                                Submit
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            }
+
+
+            @foreach (var comment in Model.allcomments)
+            {
+                <div class="card mt-4 mb-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="comment-box ml-6">
+                                <div class="rating">
+                                    @for (int i = 1; i <= comment.Rating; i++)
+                                    {
+                                        
+                                        <label for="@i">☆</label>
+                                    }
+                                </div>
+                                <div class="comment-area">
+                                    <p>@comment.Text</p>
+                                </div>
+                                <div class="comment-details mt-2">
+                                    <div class="row">
+                                         <div class="col-6">
+                                        <span class="text-muted">Posted by @comment.UserName</span>
+                                    </div>
+                                        <div class="col-6 text-end">
+                                            <span class="text-muted">@comment.DateCreated.ToString("MM/dd/yyyy")</span>
+                                        </div>
+                                    @if (User.IsInRole(SD.Role_Admin))
+                                    {
+                                    <div class="col-6 text-end">
+                                            <button asp-controller="Home" asp-route-id="@comment.Id" type="submit" asp-action="DeleteComment" class="btn btn-danger ">
+                                                Delete
+                                            </button>
+                                    </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        
+
+    
+    </div>
+
+   
+
+</form>
+
+

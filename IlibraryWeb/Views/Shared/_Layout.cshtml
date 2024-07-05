@@ -1,0 +1,169 @@
+﻿﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var categories = ViewBag.Categories as List<Category>;
+    var currentAction = HttpContextAccessor.HttpContext?.Request.RouteValues["action"]?.ToString();
+    var currentController = HttpContextAccessor.HttpContext?.Request.RouteValues["controller"]?.ToString();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - IlibraryWeb</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/IlibraryWeb.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css" />
+   
+   
+
+
+ 
+    
+
+</head>
+<body>
+
+    <div class="d-flex flex-column min-vh-100">
+    <header>
+
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom  box-shadow ">
+            <div class="container-fluid">
+                
+                
+                @await Component.InvokeAsync("Category")
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link " asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                       
+                        <li class="nav-item">
+                            <a class="nav-link " asp-area="Admin" asp-controller="Order" asp-action="Index">Manage Order</a>
+                        </li>
+                        
+                        @if (User.IsInRole(SD.Role_Admin))
+                        {
+
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Content Managment
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item">
+                                        <a class="dropdown-item " asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item " asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item " asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a>
+                                    </li>
+
+
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item " asp-area="Identity" asp-page="/Account/Register">Create User</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item " asp-area="Admin" asp-controller="User" asp-action="Index">Manage User</a>
+                                    </li>
+                                    
+
+                                </ul>
+                            </li>
+                           
+                        }
+                     
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                @await Component.InvokeAsync("ShoppingCart")
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+        @if (currentAction == "Index" && currentController == "Home")
+        {
+            <section style="position: relative; border-bottom:10px">
+                <div class="container-fluid p-0">
+                    <img src="/images/ILibrary2000.png"
+                         class="CoverImage w-100">
+
+
+                </div>
+            </section>
+
+            <section style=" background-color: #B7B597; padding: 50px; " data-aos="fade-in" id="About" class="border-top">
+                <div class="containerAbout container text-center text-white ">
+                    <h2 class="SecondSectionh2 text-center text-white" style="margin-bottom: 40px;">About Us</h2>
+                    <p class="lead">
+                        <span style="font-size: larger;">  Welcome to ILibrary! </span>
+
+                        At ILibrary, we’re passionate about connecting readers with captivating stories. Driven by our love for literature, we curate a diverse collection of books—from timeless classics to contemporary bestsellers.
+                        <br />
+                        What Sets Us Apart:
+                        <br />
+                        Quality Selection: Each book is carefully chosen for its literary merit, relevance, and impact.
+                        <br />
+                        Personalized Recommendations: Our team of avid readers provides tailored suggestions to match your taste.
+                        <br />
+                        Community Hub: ILibrary hosts book clubs, author events, and workshops to foster a vibrant literary community.
+                        <br />
+                        Whether you’re a seasoned bibliophile or a curious newcomer, we invite you to explore our shelves, discover hidden gems, and embark on literary adventures. Join us in celebrating the magic of words!
+                       
+                    </p>
+                    <hr>
+
+                    <a href="#books" class="btn btn-primary" style="margin-top: 40px;">Explore Our books</a>
+                </div>
+            </section>
+         
+        }
+
+
+        <div class="container flex-grow-1">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+        <footer class="border-top footer bg-primary text-muted" style="border-color : #192e2f">
+        <div class="container text-center">
+            Created With Love
+        </div>
+    </footer>
+    </div>
+    <script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js" asp-append-version="true"></script>
+   <script src="https://cdn.tiny.cloud/1/4luocjksldfbu3c0nd5pls2j451n72tgqssmichnz3lse2kx/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+<link rel="stylesheet" type="text/css" href="~/dt/datatables.min.css">
+<script type="text/javascript" src="~/dt/datatables.min.js"></script>
+   
+   
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
+        

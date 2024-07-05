@@ -1,0 +1,76 @@
+﻿@page
+@using Ilibrary.Utility
+@model RoleModel
+@{
+    ViewData["Title"] = "Role Information";
+    ViewData["ActivePage"] = ManageNavPages.RoleInfo;
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<hr />
+<br />
+
+
+
+    <div>
+
+    @if(User.IsInRole(SD.Role_Admin))
+    {
+        <h1>Admin Roles:</h1>
+
+        <ul>
+        <li>View Books Details</li>
+        <li>Manage Categories,Products,Company </li>
+        <li>Create,Manage Users</li>
+        <li>Manage All Oreders</li>
+        <li>(Add/Remove) Books From Cart</li>
+        <li>Order Summary , Pickup Details and Order Status</li>
+        <li>Place Order</li>
+        <li>Payment Useing Card And Cach App Pay</li>
+
+        </ul>
+          
+
+                        
+    }
+    @if (User.IsInRole(SD.Role_Company))
+    {
+        <h1>Company Roles:</h1>
+        <ul>
+        <li>View Books Details</li>
+        <li>(Add/Remove) Books From Cart</li>
+        <li>Manage His Orders</li>
+        <li>Order Summary , Pickup Details and Order Status</li>
+        <li>Place Order</li>
+        <li>Payment Later</li>
+        </ul>
+
+
+    }
+    @if (User.IsInRole(SD.Role_Customer))
+    {
+        <h1>Customer Roles:</h1>
+        <ul>
+        <li>View Books Details</li>
+        <li>(Add/Remove) Books From Cart</li>
+         <li>Manage His Orders</li>
+         <li>Order Summary , Pickup Details and Order Status</li>
+        <li>Place Order</li>
+        <li>Payment Useing Card And Cach App Pay</li>
+
+        </ul>
+
+    }
+
+
+    </div>
+
+
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
